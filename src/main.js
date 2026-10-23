@@ -319,7 +319,8 @@ if (finePointer) {
   }
 }
 
-// ---- Video cards: play the clip if it exists, otherwise open WhatsApp ----
+// ---- Video cards: the card opens its page (link stretched over it); the play button appears only
+// once the clip exists in public/videos and opens it in the modal ----
 const modal = document.getElementById("videoModal");
 const modalVideo = modal?.querySelector("video");
 document.querySelectorAll(".vcard").forEach((card) => {
@@ -332,15 +333,24 @@ document.querySelectorAll(".vcard").forEach((card) => {
     card.addEventListener("mouseenter", () => video.play().catch(() => {}));
     card.addEventListener("mouseleave", () => video.pause());
   }).catch(() => {});
-  card.addEventListener("click", () => {
-    if (!card.classList.contains("has-video")) {
-      window.open(waLink(`Olá! Quero saber mais sobre: ${card.querySelector("h3").textContent}`), "_blank", "noopener");
-      return;
-    }
+  card.querySelector(".vcard__play").addEventListener("click", () => {
     modalVideo.src = src;
     modal.hidden = false;
     modalVideo.play().catch(() => {});
   });
+});
+
+// ---- Links to #contato with data-topic / data-prefill choose the subject and start the message ----
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a[data-topic], a[data-prefill]");
+  const form = document.querySelector("[data-contact-form]");
+  if (!link || !form?.mensagem) return; // no form here, or it was already sent
+  if (link.dataset.topic) form.assunto.value = link.dataset.topic;
+  // only replace a message we wrote ourselves, never what the visitor typed
+  if (link.dataset.prefill && (!form.mensagem.value.trim() || form.mensagem.value === form.dataset.prefilled)) {
+    form.mensagem.value = form.dataset.prefilled = link.dataset.prefill;
+  }
+  setTimeout(() => form.nome.focus({ preventScroll: true }), 700);
 });
 modal?.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", closeModal));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal && !modal.hidden) closeModal(); });

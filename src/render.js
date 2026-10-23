@@ -140,12 +140,12 @@ export function areaTabs() {
           <div class="glass panel" role="tabpanel" id="${a.id}" aria-labelledby="tab-${a.id}"${i ? " hidden" : ""}>
             <div><h3>${esc(a.title)}</h3><p class="panel__lead">${esc(a.lead)}</p>
               <div class="panel__cta">
-                <a class="btn btn--gold" ${wa(`Olá! Quero falar sobre ${a.label}.`)}>Falar sobre ${esc(a.label)}</a>
-                <a class="btn btn--glass" href="${areaUrl(a)}">Ver a página</a>
+                <a class="btn btn--gold" href="${areaUrl(a)}">Ver ${esc(a.title.toLowerCase())}</a>
+                <a class="btn btn--glass" ${wa(`Olá! Quero falar sobre ${a.label}.`)}>WhatsApp</a>
               </div></div>
             <div class="panel__groups">${a.groups.map((g) => `
               <div class="panel__group"><h4>${esc(g.title)}</h4>
-                <ul class="chips">${g.items.map((it) => `<li><a ${wa(serviceMsg(a, it))}>${esc(it.name)}</a></li>`).join("")}</ul>
+                <ul class="chips">${g.items.map((it) => `<li><a href="${areaUrl(a)}#${slugify(it.name)}">${esc(it.name)}</a></li>`).join("")}</ul>
               </div>`).join("")}</div>
           </div>`).join("");
   return `<div class="areas__tabs reveal" role="tablist" aria-label="Áreas de atuação">${tabs}</div>
@@ -282,7 +282,7 @@ export function areaPage(a) {
         <h1 class="page-hero__title">${esc(a.heading)}</h1>
         <p class="page-hero__lead">${esc(a.lead)}</p>
         <div class="hero__cta">
-          <a class="btn btn--gold" ${wa(`Olá! Quero falar com um especialista em ${a.label}.`)}>Falar com um especialista</a>
+          <a class="btn btn--gold" href="#contato" data-prefill="Quero falar com um especialista em ${esc(a.label)}.">Falar com um especialista</a>
           <a class="btn btn--glass" href="#servicos">Ver os serviços</a>
         </div>
       </div>
@@ -309,7 +309,7 @@ export function areaPage(a) {
         <div class="section__head reveal">
           <p class="eyebrow">Serviços</p>
           <h2>Tudo o que fazemos em ${esc(a.label)}</h2>
-          <p class="section__lead">Toque em um serviço para falar direto com a nossa equipe pelo WhatsApp.</p>
+          <p class="section__lead">Escolha um serviço e envie sua solicitação em poucos segundos.</p>
         </div>
         ${a.groups.map((g) => `
         <div class="svc-group">
@@ -319,7 +319,10 @@ export function areaPage(a) {
               <span class="svc__n">${pad(++n)}</span>
               <h3>${esc(it.name)}</h3>
               <p>${esc(it.desc)}</p>
-              <a class="svc__go" ${wa(serviceMsg(a, it))}>Falar sobre este serviço <span aria-hidden="true">↗</span></a>
+              <div class="svc__actions">
+                <a class="svc__go" href="#contato" data-prefill="Quero saber mais sobre ${esc(it.name)}.">Quero este serviço <span aria-hidden="true">→</span></a>
+                <a class="svc__wa" ${wa(serviceMsg(a, it))} aria-label="Falar sobre ${esc(it.name)} no WhatsApp">WhatsApp</a>
+              </div>
             </article>`).join("")}
           </div>
         </div>`).join("")}

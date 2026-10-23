@@ -198,7 +198,7 @@ html:not(.is-ready) .rotator__item.is-active { opacity: 0; transform: translateY
 .vcard__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,16,18,.05) 30%, rgba(15,16,18,.75)); pointer-events: none; }
 .vcard__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s; }
 .vcard.has-video .vcard__media video { opacity: 1; }
-.vcard__play { position: absolute; z-index: 2; top: 20px; right: 20px; width: 58px; height: 58px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(255,255,255,.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: grid; place-items: center; cursor: pointer; transition: transform .3s var(--ease), background .3s; }
+.vcard__play { position: absolute; z-index: 4; top: 20px; right: 20px; width: 58px; height: 58px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(255,255,255,.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: grid; place-items: center; cursor: pointer; transition: transform .3s var(--ease), background .3s; }
 .vcard__play::before { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(230,199,127,.6); animation: ping 2.4s ease-out infinite; }
 @keyframes ping { 0% { transform: scale(.9); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
 .vcard__play svg { width: 22px; fill: var(--white); margin-left: 3px; }
@@ -206,6 +206,10 @@ html:not(.is-ready) .rotator__item.is-active { opacity: 0; transform: translateY
 .vcard__info { position: absolute; z-index: 2; left: 14px; right: 14px; bottom: 14px; padding: 18px 20px; border-radius: 18px; }
 .vcard__info h3 { margin: 8px 0 4px; font-size: 1.1rem; }
 .vcard__info p { color: var(--muted); font-size: .88rem; }
+.vcard__link { position: absolute; inset: 0; z-index: 3; border-radius: inherit; } /* the whole card opens its page */
+.vcard__more { display: inline-block; margin-top: 10px; font-size: .84rem; font-weight: 600; color: var(--gold-2); transition: transform .3s var(--ease); }
+.vcard:hover .vcard__more { transform: translateX(4px); }
+.vcard:not(.has-video) .vcard__play { display: none; } /* shows up once the clip is in public/videos */
 .tag { display: inline-block; font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--ink); background: var(--gold-2); padding: 3px 10px; border-radius: 999px; }
 
 /* Areas */
@@ -227,7 +231,7 @@ html:not(.is-ready) .rotator__item.is-active { opacity: 0; transform: translateY
 .panel__group h4 { font-family: var(--font-head); font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-2); margin: 0 0 10px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
 .chips a { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 12px; font-size: .9rem; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); transition: background .2s, border-color .2s, transform .2s var(--ease); }
-.chips a::after { content: "↗"; color: var(--gold-2); font-size: .8rem; opacity: .7; }
+.chips a::after { content: "→"; color: var(--gold-2); font-size: .8rem; opacity: .7; }
 .chips a:hover { background: rgba(201,162,74,.16); border-color: rgba(201,162,74,.5); transform: translateY(-2px); }
 
 /* Regimes */
@@ -424,6 +428,10 @@ html.is-ready .page-hero__bg { animation: heroZoom 1.6s var(--ease) both; }
 .svc p { flex: 1; color: var(--muted); font-size: .94rem; }
 .svc__go { align-self: flex-start; margin-top: 6px; font-size: .88rem; font-weight: 600; color: var(--gold-2); border-bottom: 1px solid transparent; transition: border-color .2s; }
 .svc__go:hover { border-color: var(--gold-2); }
+.svc__actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; }
+.svc__actions .svc__go { margin-top: 0; }
+.svc__wa { font-size: .8rem; color: var(--muted); transition: color .2s; }
+.svc__wa:hover { color: #25d366; }
 
 /* Inner pages: steps, FAQ, CTA band, other areas */
 .steps { background: var(--ink); }
