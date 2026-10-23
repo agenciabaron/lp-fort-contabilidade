@@ -1,73 +1,77 @@
 import "./style.css";
-import { AREAS } from "./data.js";
+import { waLink } from "./contact.js";
 
-const WHATSAPP = "5567991269082";
-const waLink = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const serviceMsg = (area, item) => `Olá! Quero saber mais sobre ${area.label}: ${item}.`;
-const chevron = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>';
 
-// ---- Mega menu, area tabs and footer columns, all from data.js ----
-const menuList = document.querySelector(".menu__list");
-menuList.insertAdjacentHTML("beforeend", AREAS.map((area) => `
-  <li class="menu__item">
-    <button class="menu__link" aria-expanded="false">${esc(area.label)}${chevron}</button>
-    <div class="mega glass" style="--cols:${area.groups.length}">
-      ${area.groups.map((g) => `
-        <div class="mega__group">
-          ${g.title ? `<p class="mega__title">${esc(g.title)}</p>` : ""}
-          <ul>${g.items.map((it) => `<li><a href="${waLink(serviceMsg(area, it))}" target="_blank" rel="noopener">${esc(it)}</a></li>`).join("")}</ul>
-        </div>`).join("")}
-      <a class="mega__more" href="#${area.id}" data-area="${area.id}">Ver ${esc(area.title.toLowerCase())} →</a>
-    </div>
-  </li>`).join(""));
+// Header, footer, tabs and area pages are rendered at build time (src/render.js); this file only adds behavior.
 
-const tabs = document.querySelector(".areas__tabs");
-const panels = document.querySelector(".areas__panels");
-tabs.innerHTML = AREAS.map((a, i) => `<button class="areas__tab" role="tab" id="tab-${a.id}" aria-controls="${a.id}" aria-selected="${i === 0}">${esc(a.label)}</button>`).join("");
-panels.innerHTML = AREAS.map((a, i) => `
-  <div class="glass panel" role="tabpanel" id="${a.id}" aria-labelledby="tab-${a.id}" ${i ? "hidden" : ""}>
-    <div><h3>${esc(a.title)}</h3><p class="panel__lead">${esc(a.lead)}</p>
-      <a class="btn btn--gold" href="${waLink(`Olá! Quero falar sobre ${a.label}.`)}" target="_blank" rel="noopener">Falar sobre ${esc(a.label)}</a></div>
-    <div class="panel__groups">${a.groups.map((g) => `
-      <div class="panel__group">${g.title ? `<h4>${esc(g.title)}</h4>` : ""}
-        <ul class="chips">${g.items.map((it) => `<li><a href="${waLink(serviceMsg(a, it))}" target="_blank" rel="noopener">${esc(it)}</a></li>`).join("")}</ul>
-      </div>`).join("")}</div>
-  </div>`).join("");
-
-function selectArea(id) {
-  tabs.querySelectorAll(".areas__tab").forEach((t) => t.setAttribute("aria-selected", t.getAttribute("aria-controls") === id));
-  panels.querySelectorAll(".panel").forEach((p) => { p.hidden = p.id !== id; });
-}
-tabs.addEventListener("click", (e) => {
-  const tab = e.target.closest(".areas__tab");
-  if (tab) selectArea(tab.getAttribute("aria-controls"));
-});
-tabs.addEventListener("keydown", (e) => {
-  if (!["ArrowRight", "ArrowLeft"].includes(e.key)) return;
-  const all = [...tabs.children];
-  const i = all.indexOf(document.activeElement);
-  const next = all[(i + (e.key === "ArrowRight" ? 1 : -1) + all.length) % all.length];
-  next.focus();
-  selectArea(next.getAttribute("aria-controls"));
+// ---- Loader, starting position and page transitions ----
+// The loader (in the header template, styled inline in <head>) covers the page until fonts are in,
+// then html.is-ready fades it out and starts the entrance animations.
+const root = document.documentElement;
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+// A new page always opens at the top, or at the service/section named in the link (#anchor)
+const goToStart = () => {
+  const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  let top = 0;
+  if (target) {
+    // offsetTop ignores the reveal's translate, so the target lands where it ends up, below the fixed header
+    for (let el = target; el; el = el.offsetParent) top += el.offsetTop;
+    top -= parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+  }
+  window.scrollTo({ top, behavior: "instant" });
+};
+goToStart();
+const pageReady = Promise.all([
+  Promise.race([document.fonts?.ready, wait(600)]),
+  wait(Math.max(0, 250 - performance.now())), // keeps a fast load from flashing the loader
+]).then(() => {
+  goToStart();
+  root.classList.add("is-ready");
+  setTimeout(() => root.classList.add("is-loaded"), 450);
 });
 
-document.querySelector(".footer__cols").innerHTML = [
-  `<div><h4>Institucional</h4><ul><li><a href="#inicio">Home</a></li><li><a href="#quemsomos">Quem somos</a></li><li><a href="#historia">Nossa história</a></li><li><a href="#contato">Contato</a></li></ul></div>`,
-  ...[AREAS.slice(0, 3), AREAS.slice(3)].map((col) => `<div><h4>Serviços</h4><ul>${col.map((a) => `<li><a href="#${a.id}" data-area="${a.id}">${esc(a.label)}</a></li>`).join("")}</ul></div>`),
-].join("");
-
-// Links that point at an area open its tab and scroll to the section
+// Internal links fade the loader in before leaving, so pages change without a blank flash
 document.addEventListener("click", (e) => {
-  const link = e.target.closest("[data-area]");
-  if (!link) return;
+  const link = e.target.closest("a[href]");
+  if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  if (link.target === "_blank" || link.hasAttribute("download")) return;
+  const url = new URL(link.href, location.href);
+  if (url.origin !== location.origin || (url.pathname === location.pathname && url.search === location.search)) return;
   e.preventDefault();
-  selectArea(link.dataset.area);
-  closeMenu();
-  document.getElementById("servicos").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+  root.classList.remove("is-loaded");
+  void root.offsetWidth; // let the loader come back before fading it in
+  root.classList.add("is-leaving");
+  setTimeout(() => { location.href = url.href; }, reduceMotion ? 0 : 180);
 });
+// Coming back through the browser's back/forward cache restores the page with the loader still up
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) root.classList.replace("is-leaving", "is-loaded");
+});
+
+// ---- Home: area tabs ----
+const tabs = document.querySelector(".areas__tabs");
+if (tabs) {
+  const panels = document.querySelector(".areas__panels");
+  const selectArea = (id) => {
+    tabs.querySelectorAll(".areas__tab").forEach((t) => t.setAttribute("aria-selected", t.getAttribute("aria-controls") === id));
+    panels.querySelectorAll(".panel").forEach((p) => { p.hidden = p.id !== id; });
+  };
+  tabs.addEventListener("click", (e) => {
+    const tab = e.target.closest(".areas__tab");
+    if (tab) selectArea(tab.getAttribute("aria-controls"));
+  });
+  tabs.addEventListener("keydown", (e) => {
+    if (!["ArrowRight", "ArrowLeft"].includes(e.key)) return;
+    const all = [...tabs.children];
+    const i = all.indexOf(document.activeElement);
+    const next = all[(i + (e.key === "ArrowRight" ? 1 : -1) + all.length) % all.length];
+    next.focus();
+    selectArea(next.getAttribute("aria-controls"));
+  });
+}
 
 // ---- WhatsApp buttons ----
 document.querySelectorAll(".js-wa").forEach((el) => {
@@ -75,6 +79,126 @@ document.querySelectorAll(".js-wa").forEach((el) => {
   el.target = "_blank";
   el.rel = "noopener";
 });
+
+// ---- Home: hero headline rotates through short phrases ----
+const rotator = document.querySelector("[data-rotator]");
+if (rotator) {
+  const items = [...rotator.children];
+  let current = 0;
+  pageReady.then(() => setInterval(() => {
+    if (document.hidden) return;
+    items[current].classList.replace("is-active", "is-out");
+    const leaving = items[current];
+    setTimeout(() => leaving.classList.remove("is-out"), 900);
+    current = (current + 1) % items.length;
+    items[current].classList.add("is-active");
+  }, 2800));
+}
+
+// ---- Contact form: validates, sends to /api/contact and thanks the visitor ----
+document.querySelectorAll("[data-contact-form]").forEach((form) => {
+  const openedAt = Date.now();
+  const msg = form.querySelector(".cform__msg");
+  const send = form.querySelector(".cform__send");
+  const say = (text, error = false) => { msg.textContent = text; msg.classList.toggle("is-error", error); };
+  // (67) 99999-9999 while typing
+  form.telefone.addEventListener("input", () => {
+    const d = form.telefone.value.replace(/\D/g, "").slice(0, 11);
+    form.telefone.value = d.length > 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}` : d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}` : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d;
+  });
+  form.addEventListener("input", (e) => e.target.removeAttribute("aria-invalid"));
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const invalid = [...form.querySelectorAll("[required]")].filter((el) => !el.checkValidity()
+      || (el.name === "telefone" && el.value.replace(/\D/g, "").length < 10));
+    invalid.forEach((el) => el.setAttribute("aria-invalid", "true"));
+    if (invalid.length) {
+      invalid[0].focus();
+      return say(form.aceite.checked || invalid[0] !== form.aceite ? "Preencha os campos marcados." : "Marque a autorização para enviarmos a resposta.", true);
+    }
+    send.disabled = true;
+    send.textContent = "Enviando…";
+    say("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          nome: form.nome.value, telefone: form.telefone.value, email: form.email.value, assunto: form.assunto.value,
+          mensagem: form.mensagem.value, aceite: form.aceite.checked, site: form.site.value, t: openedAt, pagina: location.pathname,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Não foi possível enviar agora.");
+      const first = form.nome.value.trim().split(" ")[0];
+      form.innerHTML = `<div class="cform__done"><strong>Mensagem enviada, ${first.replace(/[<>&"]/g, "")}!</strong><p>Nossa equipe responde no horário de atendimento. Se for urgente, fale agora pelo WhatsApp.</p><a class="btn btn--glass" href="${waLink(`Olá! Sou ${first} e acabei de enviar uma mensagem pelo site.`)}" target="_blank" rel="noopener">Abrir o WhatsApp</a></div>`;
+    } catch (err) {
+      say(`${err.message} Você também pode chamar no WhatsApp.`, true);
+      send.disabled = false;
+      send.textContent = "Enviar mensagem";
+    }
+  });
+});
+
+// ---- Reviews: approved ones from /api/feedback, and the dialog where clients rate the firm ----
+const reviewsTrack = document.querySelector("[data-reviews]");
+if (reviewsTrack) {
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const stars = (n) => `<span class="stars" aria-label="${n} de 5 estrelas">${"★".repeat(n)}<span class="off">${"★".repeat(5 - n)}</span></span>`;
+  fetch("/api/feedback").then((r) => (r.ok ? r.json() : { reviews: [] })).then(({ reviews = [] }) => {
+    if (!reviews.length) {
+      document.querySelector("[data-reviews-cta]").textContent = "Seja o primeiro a avaliar a Fort";
+      return;
+    }
+    reviewsTrack.innerHTML = reviews.map((r) => `
+      <figure class="glass review">
+        ${stars(r.nota)}
+        <blockquote>${esc(r.comentario)}</blockquote>
+        <figcaption><strong>${esc(r.nome)}</strong>${r.empresa ? `<span>${esc(r.empresa)}</span>` : ""}</figcaption>
+      </figure>`).join("");
+    reviewsTrack.hidden = false;
+    const avg = reviews.reduce((sum, r) => sum + r.nota, 0) / reviews.length;
+    const summary = document.querySelector("[data-reviews-summary]");
+    summary.innerHTML = `<strong>${avg.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</strong><div>${stars(Math.round(avg))}<span>${reviews.length} ${reviews.length > 1 ? "avaliações" : "avaliação"}</span></div>`;
+    summary.hidden = false;
+  }).catch(() => {});
+
+  const dialog = document.querySelector("[data-review-dialog]");
+  const form = dialog.querySelector("[data-review-form]");
+  let openedAt = 0;
+  document.querySelector("[data-review-open]").addEventListener("click", () => { openedAt = Date.now(); dialog.showModal(); });
+  dialog.querySelector("[data-review-close]").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); }); // click on the backdrop
+  form.addEventListener("input", (e) => (e.target.closest(".rating") || e.target).removeAttribute("aria-invalid"));
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = form.querySelector(".cform__msg");
+    const send = form.querySelector(".cform__send");
+    const say = (text, error = false) => { msg.textContent = text; msg.classList.toggle("is-error", error); };
+    const invalid = [...form.querySelectorAll("input[name=nome], textarea, input[name=aceite]")].filter((el) => !el.checkValidity());
+    invalid.forEach((el) => el.setAttribute("aria-invalid", "true"));
+    if (!form.nota.value) form.querySelector(".rating").setAttribute("aria-invalid", "true");
+    if (!form.nota.value || invalid.length) return say(!form.nota.value ? "Escolha de 1 a 5 estrelas." : "Preencha os campos marcados.", true);
+    send.disabled = true;
+    send.textContent = "Enviando…";
+    say("");
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ nota: Number(form.nota.value), nome: form.nome.value, empresa: form.empresa.value, comentario: form.comentario.value, aceite: form.aceite.checked, site: form.site.value, t: openedAt }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Não foi possível enviar agora.");
+      form.innerHTML = `<div class="cform__done"><strong>Obrigado pela avaliação!</strong><p>Ela aparece no site assim que nossa equipe conferir.</p><button class="btn btn--glass" type="button" data-review-close>Fechar</button></div>`;
+      form.querySelector("[data-review-close]").addEventListener("click", () => dialog.close());
+    } catch (err) {
+      say(err.message, true);
+      send.disabled = false;
+      send.textContent = "Enviar avaliação";
+    }
+  });
+}
 
 // ---- Nav: scrolled state, dropdowns, mobile drawer ----
 const nav = document.getElementById("nav");
@@ -105,7 +229,7 @@ items.forEach((item) => {
   item.addEventListener("mouseenter", () => { if (isDesktop()) setOpen(item, true); });
   item.addEventListener("mouseleave", () => { if (isDesktop()) setOpen(item, false); });
 });
-nav.querySelectorAll(".menu__list > li > a.menu__link").forEach((a) => a.addEventListener("click", closeMenu));
+nav.querySelectorAll(".menu a").forEach((a) => a.addEventListener("click", () => { items.forEach((i) => setOpen(i, false)); closeMenu(); }));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { items.forEach((i) => setOpen(i, false)); closeMenu(); } });
 document.addEventListener("click", (e) => { if (!e.target.closest(".menu__item")) items.forEach((i) => setOpen(i, false)); });
 
@@ -127,6 +251,7 @@ function onScroll() {
     const offset = (r.top + r.height / 2 - vh / 2) * parseFloat(el.dataset.parallax);
     el.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
   });
+  if (!timeline) return;
   const t = timeline.getBoundingClientRect();
   timeline.style.setProperty("--tl", Math.min(1, Math.max(0, (vh * 0.85 - t.top) / (t.height + vh * 0.3))).toFixed(3));
 }
@@ -134,20 +259,42 @@ window.addEventListener("scroll", () => { if (!ticking) { ticking = true; reques
 window.addEventListener("resize", onScroll);
 onScroll();
 
-// ---- Reveal on scroll (content stays visible without JS) ----
+// ---- Reveal on scroll (content stays visible without JS); starts once the loader is gone ----
 if (!reduceMotion && "IntersectionObserver" in window) {
-  document.documentElement.classList.add("js-anim");
+  root.classList.add("js-anim");
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const el = entry.target;
       const siblings = [...el.parentElement.children].filter((c) => c.classList.contains("reveal"));
-      el.style.transitionDelay = `${Math.max(0, siblings.indexOf(el)) * 90}ms`;
+      el.style.transitionDelay = `${Math.min(4, Math.max(0, siblings.indexOf(el))) * 60}ms`;
       el.classList.add("is-in");
       io.unobserve(el);
     });
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  pageReady.then(() => document.querySelectorAll(".reveal").forEach((el) => io.observe(el)));
+
+  // Numbers count up when they come into view ("+40 anos", "11 serviços")
+  const countUp = (el) => {
+    const text = el.textContent;
+    const target = Number(text.match(/\d+/)?.[0]);
+    if (!target) return;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / 1000);
+      el.textContent = text.replace(/\d+/, String(Math.round(target * (1 - Math.pow(1 - p, 3)))));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const counters = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      countUp(entry.target);
+      counters.unobserve(entry.target);
+    });
+  }, { threshold: 0.6 });
+  pageReady.then(() => document.querySelectorAll("[data-count]").forEach((el) => counters.observe(el)));
 }
 
 // ---- Glass sheen + 3D tilt follow the pointer ----
@@ -174,7 +321,7 @@ if (finePointer) {
 
 // ---- Video cards: play the clip if it exists, otherwise open WhatsApp ----
 const modal = document.getElementById("videoModal");
-const modalVideo = modal.querySelector("video");
+const modalVideo = modal?.querySelector("video");
 document.querySelectorAll(".vcard").forEach((card) => {
   const src = card.dataset.video;
   const video = card.querySelector("video");
@@ -195,8 +342,8 @@ document.querySelectorAll(".vcard").forEach((card) => {
     modalVideo.play().catch(() => {});
   });
 });
-modal.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", closeModal));
-document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+modal?.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", closeModal));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal && !modal.hidden) closeModal(); });
 function closeModal() {
   modalVideo.pause();
   modalVideo.removeAttribute("src");
@@ -207,6 +354,8 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
 // ---- Hero 3D column loads after first paint ----
 const canvas = document.getElementById("hero3d");
-const start = () => import("./hero3d.js").then((m) => m.initHero3D(canvas));
-if ("requestIdleCallback" in window) requestIdleCallback(start, { timeout: 1200 });
-else setTimeout(start, 300);
+if (canvas) {
+  const start = () => import("./hero3d.js").then((m) => m.initHero3D(canvas));
+  if ("requestIdleCallback" in window) requestIdleCallback(start, { timeout: 1200 });
+  else setTimeout(start, 300);
+}

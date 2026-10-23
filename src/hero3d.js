@@ -14,7 +14,7 @@ export function initHero3D(canvas) {
   }
   const isMobile = window.matchMedia("(max-width: 1024px)").matches;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
 
@@ -67,7 +67,7 @@ export function initHero3D(canvas) {
   scene.add(rig);
 
   // gold dust
-  const count = isMobile ? 220 : 520;
+  const count = isMobile ? 140 : 320;
   const arr = new Float32Array(count * 3);
   const speeds = new Float32Array(count);
   for (let i = 0; i < count; i++) {

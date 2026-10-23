@@ -1,20 +1,13 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--HEAD_COMMON-->
   <title>Fort Contabilidade | Contabilidade em Dourados/MS</title>
   <meta name="description" content="Fort Contabilidade em Dourados/MS: contabilidade, fiscal, DP/RH, societário, regulatório e consultoria. Abertura de empresas, troca de contador, MEI para ME, imposto de renda e produtor rural." />
-  <meta name="theme-color" content="#0f1012" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://fortcontabilidadems.com.br/" />
   <meta property="og:title" content="Fort Contabilidade | Dourados/MS" />
   <meta property="og:description" content="Contabilidade próxima, estratégica e comprometida com o crescimento da sua empresa." />
-  <meta property="og:image" content="/img/socios.jpg" />
-  <meta property="og:locale" content="pt_BR" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <meta property="og:image" content="https://fortcontabilidadems.com.br/img/og.jpg" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -35,24 +28,7 @@
 </head>
 <body>
   <!--LOGO_SYMBOL-->
-  <div class="scroll-progress" aria-hidden="true"><span></span></div>
-
-  <header class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="#inicio" class="nav__logo" aria-label="Fort Contabilidade, início">
-        <svg class="logo" viewBox="0 0 2144 795" role="img" aria-label="Fort Contabilidade"><use href="#logo" /></svg>
-      </a>
-      <nav class="menu" id="menu" aria-label="Principal">
-        <ul class="menu__list">
-          <li><a class="menu__link" href="#inicio">Home</a></li>
-          <li><a class="menu__link" href="#quemsomos">Quem somos</a></li>
-          <!-- area items are rendered from src/data.js -->
-        </ul>
-        <a class="btn btn--gold menu__cta js-wa" href="#" data-msg="Olá! Quero falar com um contador da Fort.">Fale com um contador</a>
-      </nav>
-      <button class="nav__toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-    </div>
-  </header>
+  <!--HEADER-->
 
   <main>
     <!-- HERO -->
@@ -64,8 +40,15 @@
           <p class="eyebrow reveal">Escritório de contabilidade · Dourados/MS</p>
           <h1 class="hero__title">
             <span class="line"><span>Sua empresa</span></span>
-            <span class="line"><span>sobre uma base</span></span>
-            <span class="line"><span class="gold">sólida.</span></span>
+            <span class="sr-only">em base sólida.</span>
+            <!-- one phrase at a time (main.js); all share one grid cell, so the title never changes height -->
+            <span class="rotator" data-rotator aria-hidden="true">
+              <span class="rotator__item gold is-active">em base sólida.</span>
+              <span class="rotator__item gold">sem multas.</span>
+              <span class="rotator__item gold">no regime certo.</span>
+              <span class="rotator__item gold">sempre em dia.</span>
+              <span class="rotator__item gold">crescendo.</span>
+            </span>
           </h1>
           <p class="hero__lead reveal">Contabilidade, impostos, folha de pagamento, consultoria e auditoria com tecnologia moderna e atendimento de quem conhece cada cliente pelo nome.</p>
           <div class="hero__cta reveal">
@@ -74,7 +57,7 @@
           </div>
         </div>
         <ul class="hero__chips" aria-label="Destaques">
-          <li class="glass chip chip--a"><strong>+40 anos</strong><span>de tradição com a Wilcont</span></li>
+          <li class="glass chip chip--a"><strong data-count>+40 anos</strong><span>de tradição com a Wilcont</span></li>
           <li class="glass chip chip--b"><strong>2×</strong><span>carteira de clientes em 2025</span></li>
           <li class="glass chip chip--c"><strong>Simples · Presumido · Real</strong><span>todos os regimes</span></li>
         </ul>
@@ -92,8 +75,8 @@
     <!-- ABOUT -->
     <section class="section about" id="quemsomos">
       <div class="container about__grid">
-        <figure class="about__photo reveal" data-parallax="0.08">
-          <div class="ph ph--socios" role="img" aria-label="Sócios em reunião de planejamento no escritório"></div>
+        <figure class="about__photo about__photo--team reveal" data-parallax="0.08">
+          <div class="ph ph--socios" role="img" aria-label="Lucas Rocha e Erick Lima no escritório da Fort Contabilidade"></div>
           <figcaption class="glass about__badge"><strong>Desde 2015</strong><span>na contabilidade, juntos</span></figcaption>
         </figure>
         <div class="about__text">
@@ -105,6 +88,7 @@
             <li class="glass diff reveal"><span class="diff__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span><div><h3>Tecnologia moderna</h3><p>Sistemas atualizados e processos digitais que otimizam a rotina da sua empresa.</p></div></li>
             <li class="glass diff reveal"><span class="diff__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><div><h3>Atendimento personalizado</h3><p>Apesar de toda a tecnologia, cada cliente é único e fala com quem conhece o seu negócio.</p></div></li>
           </ul>
+          <a class="btn btn--glass about__more reveal" href="/quem-somos/">Conheça a nossa história</a>
         </div>
       </div>
     </section>
@@ -117,10 +101,10 @@
           <h2>O que você precisa resolver hoje?</h2>
         </div>
         <div class="quick__grid">
-          <a class="glass qcard tilt reveal js-wa" href="#" data-msg="Olá! Quero abrir uma empresa com a Fort."><span class="qcard__n">01</span><h3>Abrir empresa</h3><p>Viabilidade, Junta Comercial, CNPJ e certificado digital.</p><span class="qcard__go" aria-hidden="true">→</span></a>
-          <a class="glass qcard tilt reveal js-wa" href="#" data-msg="Olá! Quero trocar de contador e conhecer a Fort."><span class="qcard__n">02</span><h3>Trocar de contador</h3><p>Fazemos a transição completa, sem dor de cabeça e sem perder prazos.</p><span class="qcard__go" aria-hidden="true">→</span></a>
-          <a class="glass qcard tilt reveal js-wa" href="#" data-msg="Olá! Quero migrar de MEI para ME."><span class="qcard__n">03</span><h3>Migrar de MEI para ME</h3><p>Seu negócio cresceu? Fazemos o desenquadramento no regime certo.</p><span class="qcard__go" aria-hidden="true">→</span></a>
-          <a class="glass qcard tilt reveal js-wa" href="#" data-msg="Olá! Quero fazer minha declaração de Imposto de Renda."><span class="qcard__n">04</span><h3>Declaração do IRPF</h3><p>Imposto de renda pessoa física com conferência e segurança.</p><span class="qcard__go" aria-hidden="true">→</span></a>
+          <a class="glass qcard qcard--photo tilt reveal js-wa" href="#" data-msg="Olá! Quero abrir uma empresa com a Fort."><span class="ph qcard__ph" style="--img:url(/img/q-abrir.webp)" aria-hidden="true"></span><span class="qcard__n">01</span><h3>Abrir empresa</h3><p>Viabilidade, Junta Comercial, CNPJ e certificado digital.</p><span class="qcard__go" aria-hidden="true">→</span></a>
+          <a class="glass qcard qcard--photo tilt reveal js-wa" href="#" data-msg="Olá! Quero trocar de contador e conhecer a Fort."><span class="ph qcard__ph" style="--img:url(/img/q-trocar.webp)" aria-hidden="true"></span><span class="qcard__n">02</span><h3>Trocar de contador</h3><p>Fazemos a transição completa, sem dor de cabeça e sem perder prazos.</p><span class="qcard__go" aria-hidden="true">→</span></a>
+          <a class="glass qcard qcard--photo tilt reveal js-wa" href="#" data-msg="Olá! Quero migrar de MEI para ME."><span class="ph qcard__ph" style="--img:url(/img/q-mei.webp)" aria-hidden="true"></span><span class="qcard__n">03</span><h3>Migrar de MEI para ME</h3><p>Seu negócio cresceu? Fazemos o desenquadramento no regime certo.</p><span class="qcard__go" aria-hidden="true">→</span></a>
+          <a class="glass qcard qcard--photo tilt reveal js-wa" href="#" data-msg="Olá! Quero fazer minha declaração de Imposto de Renda."><span class="ph qcard__ph" style="--img:url(/img/q-irpf.webp)" aria-hidden="true"></span><span class="qcard__n">04</span><h3>Declaração do IRPF</h3><p>Imposto de renda pessoa física com conferência e segurança.</p><span class="qcard__go" aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
@@ -170,8 +154,7 @@
           <h2>Tudo o que a sua empresa precisa, em um só escritório</h2>
           <p class="section__lead">Escolha uma área e toque no serviço para falar direto com a nossa equipe.</p>
         </div>
-        <div class="areas__tabs reveal" role="tablist" aria-label="Áreas de atuação"></div>
-        <div class="areas__panels"></div>
+        <!--AREA_TABS-->
       </div>
     </section>
 
@@ -183,9 +166,9 @@
           <h2>Experiência em todos os regimes tributários</h2>
         </div>
         <div class="regime-grid">
-          <article class="glass regime tilt reveal"><h3>Simples Nacional</h3><p>Para micro e pequenas empresas que querem uma rotina simples e o menor imposto possível dentro do regime.</p></article>
-          <article class="glass regime tilt reveal"><h3>Lucro Presumido</h3><p>Para empresas em crescimento que precisam de planejamento para equilibrar margem e carga tributária.</p></article>
-          <article class="glass regime tilt reveal"><h3>Lucro Real</h3><p>Para operações mais complexas, com controles robustos e aproveitamento correto de créditos.</p></article>
+          <article class="glass regime tilt reveal reveal--zoom"><h3>Simples Nacional</h3><p>Para micro e pequenas empresas que querem uma rotina simples e o menor imposto possível dentro do regime.</p></article>
+          <article class="glass regime tilt reveal reveal--zoom"><h3>Lucro Presumido</h3><p>Para empresas em crescimento que precisam de planejamento para equilibrar margem e carga tributária.</p></article>
+          <article class="glass regime tilt reveal reveal--zoom"><h3>Lucro Real</h3><p>Para operações mais complexas, com controles robustos e aproveitamento correto de créditos.</p></article>
         </div>
         <div class="regimes__cta reveal">
           <p>Não sabe qual regime é o melhor para você?</p>
@@ -198,7 +181,7 @@
     <section class="rural" id="rural">
       <div class="ph ph--rural rural__bg" data-parallax="0.2" aria-hidden="true"></div>
       <div class="container rural__inner">
-        <div class="glass rural__panel reveal">
+        <div class="glass rural__panel reveal reveal--left">
           <p class="eyebrow">Agronegócio</p>
           <h2>Contabilidade feita para quem produz no campo</h2>
           <p>Mato Grosso do Sul é agro, e a Fort entende a rotina do produtor rural. Cuidamos da parte contábil e fiscal para você cuidar da safra.</p>
@@ -220,12 +203,11 @@
           <p class="eyebrow">Nossa história</p>
           <h2>Uma trajetória construída passo a passo</h2>
         </div>
-        <ol class="timeline">
-          <li class="tl reveal"><span class="tl__dot" aria-hidden="true"></span><span class="tl__year">2015</span><div class="glass tl__card"><h3>O começo</h3><p>Primeiros passos na Wilcont como office boys. Arquivo, escrita fiscal, departamento pessoal e contábil: uma base sólida em cada setor.</p></div></li>
-          <li class="tl reveal"><span class="tl__dot" aria-hidden="true"></span><span class="tl__year">2023</span><div class="glass tl__card"><h3>Nasce a Fort</h3><p>Sem sede própria, atendendo nos clientes e on-line. Comprometimento, agilidade e transparência desde o primeiro dia.</p></div></li>
-          <li class="tl reveal"><span class="tl__dot" aria-hidden="true"></span><span class="tl__year">2025</span><div class="glass tl__card"><h3>Primeira sede</h3><p>A abertura do escritório físico em Dourados. No mesmo ano, a carteira de clientes dobrou.</p></div></li>
-          <li class="tl reveal"><span class="tl__dot" aria-hidden="true"></span><span class="tl__year">2026</span><div class="glass tl__card tl__card--gold"><h3>Fort + Wilcont</h3><p>A aquisição da Wilcont, com mais de 40 anos de história no MS. O lugar onde tudo começou agora faz parte do futuro da Fort.</p></div></li>
-        </ol>
+        <figure class="history__photo reveal">
+          <div class="ph ph--socios" data-parallax="0.06" role="img" aria-label="Lucas Rocha e Erick Lima, sócios-fundadores da Fort Contabilidade"></div>
+          <figcaption><strong>Erick Lima e Lucas Rocha</strong><span>De office boys na Wilcont a sócios da Fort</span></figcaption>
+        </figure>
+        <!--TIMELINE-->
       </div>
     </section>
 
@@ -236,54 +218,21 @@
         <div class="glass founders__card reveal">
           <blockquote><p>Crescer nunca foi apenas aumentar uma carteira de clientes. Crescer é construir confiança, desenvolver pessoas, gerar valor e participar da história de cada empresa que caminha ao nosso lado.</p></blockquote>
           <div class="founders__names">
-            <div class="founder"><span class="founder__avatar">LR</span><div><strong>Lucas Rocha</strong><span>Sócio-fundador</span></div></div>
-            <div class="founder"><span class="founder__avatar">EL</span><div><strong>Erick Lima</strong><span>Sócio-fundador</span></div></div>
+            <div class="founder"><img class="founder__avatar" src="/img/lucas.webp" width="64" height="64" alt="" loading="lazy" /><div><strong>Lucas Rocha</strong><span>Sócio-fundador</span></div></div>
+            <div class="founder"><img class="founder__avatar" src="/img/erick.webp" width="64" height="64" alt="" loading="lazy" /><div><strong>Erick Lima</strong><span>Sócio-fundador</span></div></div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- REVIEWS -->
+    <!--REVIEWS-->
+
     <!-- CONTACT -->
-    <section class="section contact" id="contato">
-      <div class="container contact__grid">
-        <div class="contact__info">
-          <p class="eyebrow reveal">Contato</p>
-          <h2 class="reveal">Fale com um contador agora</h2>
-          <p class="section__lead reveal">Atendimento presencial em Dourados e on-line para todo o Mato Grosso do Sul.</p>
-          <ul class="contact__list">
-            <li class="glass reveal"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 1114 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><strong>Endereço</strong><span>Rua Cuiabá, 1840, Centro, Dourados/MS</span></div></li>
-            <li class="glass reveal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Horário</strong><span>Segunda a sexta, 07:00 às 11:00 e 13:00 às 17:00</span></div></li>
-            <li class="glass reveal"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a1 1 0 01-1 1A16 16 0 014 5a1 1 0 011-1z"/></svg><div><strong>WhatsApp</strong><a class="js-wa" href="#" data-msg="Olá! Vim pelo site da Fort Contabilidade.">(67) 99126-9082</a></div></li>
-            <li class="glass reveal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><strong>E-mail</strong><a href="mailto:contato@fortcontabilidadems.com.br">contato@fortcontabilidadems.com.br</a></div></li>
-            <li class="glass reveal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><div><strong>Instagram</strong><a href="https://www.instagram.com/fort_contabilidade/" target="_blank" rel="noopener">@fort_contabilidade</a></div></li>
-          </ul>
-        </div>
-        <div class="glass contact__map reveal">
-          <iframe title="Mapa: Fort Contabilidade, Rua Cuiabá 1840, Dourados/MS" src="https://www.google.com/maps?q=Rua+Cuiab%C3%A1,+1840,+Centro,+Dourados+-+MS&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-    </section>
+    <!--CONTACT:map-->
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand">
-          <svg class="logo" viewBox="0 0 2144 795" role="img" aria-label="Fort Contabilidade"><use href="#logo" /></svg>
-          <p>Contabilidade próxima, estratégica e comprometida com os resultados de cada cliente.</p>
-        </div>
-        <div class="footer__cols"></div>
-      </div>
-      <div class="footer__bottom">
-        <p>CNPJ 49.795.525/0001-50 · CRC/MS 001894/O-5</p>
-        <p>© <span id="year">2026</span> Fort Contabilidade. Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
-
-  <a class="wa-float js-wa" href="#" data-msg="Olá! Vim pelo site e gostaria de falar com a Fort Contabilidade." aria-label="Falar no WhatsApp">
-    <svg viewBox="0 0 32 32"><path d="M16 3a13 13 0 00-11.2 19.6L3 29l6.6-1.7A13 13 0 1016 3zm0 23.6a10.6 10.6 0 01-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.6 10.6 0 1116 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7 0a8.7 8.7 0 01-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 00-.9.4 3.6 3.6 0 00-1.1 2.7 6.3 6.3 0 001.3 3.3 14.4 14.4 0 005.5 4.9c2 .9 2.8.9 3.8.8a3.3 3.3 0 002.1-1.5 2.7 2.7 0 00.2-1.5c-.1-.2-.3-.3-.6-.4z"/></svg>
-  </a>
+  <!--FOOTER-->
 
   <div class="modal" id="videoModal" hidden>
     <div class="modal__backdrop" data-close></div>

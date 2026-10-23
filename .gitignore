@@ -1,5 +1,7 @@
 node_modules
 dist
 .DS_Store
-public/img
 public/favicon.svg
+.data
+.env
+.env*.local
