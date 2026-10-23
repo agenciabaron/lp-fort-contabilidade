@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "prebuild": "node scripts/fetch-images.mjs"
+    "prebuild": "node scripts/favicon.mjs && node scripts/fetch-images.mjs"
   },
   "dependencies": {
     "three": "^0.180.0"

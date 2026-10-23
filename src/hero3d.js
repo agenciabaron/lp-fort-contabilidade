@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
-import columnSvg from "./column.svg?raw";
+import logoSymbol from "./logo-symbol.html?raw";
 
 // The Fort logo column, extruded in 3D with the logo's own proportions:
 // pearl faces, gold edges, floating gold dust and a light sweep. Scroll turns and lifts it.
@@ -26,7 +26,8 @@ export function initHero3D(canvas) {
   camera.position.set(0, 0, 15);
 
   // Extrude the traced logo column
-  const data = new SVGLoader().parse(columnSvg);
+  const columnPath = logoSymbol.match(/<path fill="var\(--lg-c[^"]*" d="([^"]+)"/)[1];
+  const data = new SVGLoader().parse(`<svg xmlns="http://www.w3.org/2000/svg"><path d="${columnPath}"/></svg>`);
   const shapes = data.paths.flatMap((p) => SVGLoader.createShapes(p));
   const geo = new THREE.ExtrudeGeometry(shapes, {
     depth: 120, bevelEnabled: true, bevelThickness: 10, bevelSize: 6, bevelSegments: 4, curveSegments: 24,
