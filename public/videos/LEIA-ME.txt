@@ -1,0 +1,5 @@
+Coloque aqui os vídeos dos cards (MP4, H.264, até ~8 MB cada, vertical 4:5 ou 1080x1350):
+  historia.mp4  -> card "Nossa história"
+  abertura.mp4  -> card "Abra sua empresa do jeito certo"
+  rural.mp4     -> card "Contabilidade para o produtor rural"
+Enquanto o arquivo não existir, o card mostra a animação de motion e o clique abre o WhatsApp.
